@@ -1,0 +1,60 @@
+service:
+  name: uscis-case-status-notifier
+
+provider:
+  name: aws
+  runtime: python3.6
+  variableSyntax: "\\${{([ ~:a-zA-Z0-9._\\'\",\\-\\/\\(\\)]+?)}}"
+  stage: ${{opt:stage, 'dev'}}
+  region: ${{opt:region, 'us-west-2'}}
+  profile: serverless-admin
+  memorySize: 512
+  timeout: 10
+  versionFunctions: false
+  iamRoleStatements:
+    - Effect: "Allow"
+      Action:
+        - "dynamodb:PutItem"
+        - "dynamodb:GetItem"
+        - "dynamodb:Scan"
+        - "dynamodb:Query"
+        - "dynamodb:UpdateItem"
+      Resource:
+        Fn::GetAtt: [USCISCasesTable, Arn]
+
+package:
+  individually: true
+
+plugins:
+  - serverless-package-python-functions
+
+
+custom:
+  pkgPyFuncs:
+    buildDir: _build
+
+functions:
+  SendCaseStatusUpdate:
+    name: uscis_send_case_status_update
+    handler: lambda_function.lambda_handler
+    environment:
+      TWILIO_AUTH_TOKEN: ${{ssm:/twilio/auth_token~true}}
+      TWILIO_ACCOUNT_SID: ${{ssm:/twilio/account_sid~true}}
+      TWILIO_PHONE_NUMBER: ${{ssm:/twilio/phonenumber~true}}
+      RECIPIENT_NUMBER: ${{ssm:/uscis/recipient_number~true}}
+      RECEIPT_NUMBER: ${{ssm:/uscis/receipt_number~true}}
+      CASE_STATUS_TABLE:
+        Ref: USCISCasesTable
+    package:
+      include:
+        - functions/send_case_status_update
+      artifact: ${{self:custom.pkgPyFuncs.buildDir}}/${{self:functions.SendCaseStatusUpdate.name}}.zip
+    events:
+      - schedule:
+          name: uscis-case-status-notifier-cron
+          description: 'Cron job for executing uscis-case-status-notifier application'
+          rate: cron(0 17 * * ? 2018)
+
+
+resources:
+  - ${{file(resources/dynamodb.yaml)}}

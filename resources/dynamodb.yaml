@@ -1,0 +1,14 @@
+Resources:
+  USCISCasesTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: uscis_case_statuses
+      AttributeDefinitions:
+        - AttributeName: receipt_number
+          AttributeType: S
+      KeySchema:
+        - AttributeName: receipt_number
+          KeyType: HASH
+      ProvisionedThroughput:
+        ReadCapacityUnits: 5
+        WriteCapacityUnits: 5

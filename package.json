@@ -1,0 +1,16 @@
+{
+  "name": "uscis-case-status-notifier",
+  "version": "1.0.0",
+  "description": "Receive an SMS update when a USCIS case status changes",
+  "main": "index.js",
+  "dependencies": {
+    "serverless": "^1.32.0",
+    "serverless-package-python-functions": "^0.2.5"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "dev": "serverless deploy --stage dev --region us-west-2 --verbose"
+  },
+  "author": "Ubani Balogun",
+  "license": "ISC"
+}
