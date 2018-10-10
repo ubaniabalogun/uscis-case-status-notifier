@@ -1,8 +1,10 @@
 # uscis-case-status-notifier
 **What does it do?**
+
 Sends an SMS notification when a USCIS case status changes on the [USCIS website](https://egov.uscis.gov/casestatus/landing.do).
 
 **How does it do it?**
+
 The solution makes use of the following services: AWS Lambda, AWS Cloudwatch, AWS DynamoDB, Twilio API and the USCIS case status website.
 
 An AWS Cloudwatch Event triggers an AWS Lambda function that makes a post request with a USCIS case receipt number to the USCIS case status website. The Lambda function scrapes the returned HTML page for the most current status of the case and compares it with the last status of the case which is stored in DynamoDB.
