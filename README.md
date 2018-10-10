@@ -10,6 +10,8 @@ The solution makes use of the following services: AWS Lambda, AWS Cloudwatch, AW
 An AWS Cloudwatch Event triggers an AWS Lambda function that makes a post request with a USCIS case receipt number to the USCIS case status website. The Lambda function scrapes the returned HTML page for the most current status of the case and compares it with the last status of the case which is stored in DynamoDB.
 If the current status of the case differs from the last status, the Lambda function updates DynamoDB with the current status then uses the Twilio API to send an SMS with the current status to the designated number.
 
+![sequence diagram](./docs/uscis_case_status_diagram.png)
+
 ## Deployment
 The solution is designed to be deployed to AWS using the [Serverless Framework](https://serverless.com).
 
