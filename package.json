@@ -4,12 +4,20 @@
   "description": "Receive an SMS update when a USCIS case status changes",
   "main": "index.js",
   "dependencies": {
+    "cli-prompt": "^0.6.0",
     "serverless": "^1.32.0",
     "serverless-package-python-functions": "^0.2.5"
   },
   "devDependencies": {},
+  "config": {
+    "region": "us-west-2",
+    "stage": "dev",
+    "awsProfile": "serverless-admin"
+  },
   "scripts": {
-    "dev": "serverless deploy --stage dev --region us-west-2 --verbose"
+    "config": "node config.js",
+    "deploy": "sls deploy --stage $npm_package_config_stage --region $npm_package_config_region  --aws-profile $npm_package_config_awsProfile --verbose",
+    "remove": "sls remove --aws-profile $npm_package_config_awsProfile --stage $npm_package_config_stage --region $npm_package_config_region"
   },
   "author": "Ubani Balogun",
   "license": "ISC"

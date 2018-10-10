@@ -7,7 +7,6 @@ provider:
   variableSyntax: "\\${{([ ~:a-zA-Z0-9._\\'\",\\-\\/\\(\\)]+?)}}"
   stage: ${{opt:stage, 'dev'}}
   region: ${{opt:region, 'us-west-2'}}
-  profile: serverless-admin
   memorySize: 512
   timeout: 10
   versionFunctions: false
@@ -30,6 +29,7 @@ plugins:
 
 
 custom:
+  packageJson: severless-admin
   pkgPyFuncs:
     buildDir: _build
 
